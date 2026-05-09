@@ -8,9 +8,16 @@ from __future__ import annotations
 
 import io
 import os
+import sys
 import time
 import warnings
 from dataclasses import dataclass
+
+# Defensive: matplotlib's Path.__deepcopy__ recurses through nested Paths when
+# copying tick properties. Default Python recursion (1000) is enough for
+# normal plots but can blow up under some Python/matplotlib version pairs
+# (e.g. Python 3.14 default Render runtime). Bumping it is cheap and safe.
+sys.setrecursionlimit(10_000)
 
 import matplotlib.pyplot as plt
 import numpy as np
